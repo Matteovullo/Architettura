@@ -1,0 +1,550 @@
+LABORATORIO
+1)Funzione logica.
+Funzione con una o più variabili BINARIE di ingresso ed una variabile BINARIA di uscita.
+
+2)Rifarla con solo porte NAND.
+
+
+3)Convertire 9 in binario e spiegare come.
+9/2=4 resto 1
+4/2=2 resto 0
+2/2=1 resto 0
+1/2=1 resto 1
+9 è uguale a 1001
+
+4)Prende due numeri, uno successivo all'altro, fare somma e metterla in una ancora successiva all'ultima prelevato.
+Move R2,#Ind
+Load R3,(R2)
+Load R4,4(R2)
+Add R5,R4,R3
+Store R5, SOMMA
+
+5)Descrivere istruzione per somma secondo ASSEMBLY DAL LIBRO
+Cosa si aspetta il programmatore da questa istruzione
+Move R1, #NUM
+Load R2, [R1]
+Load R3, 4[R1]
+Add R4, R2, R3
+Store R4, LOC
+Il programmatore si aspetta che venga eseguita la somma fra registri.
+
+---------------------------------------------------------------------------------------------------
+CAPITOLO 2
+
+2)ISA di CISC, differenza con RISC, FARE ESEMPIO CON UNA O L'ALTRA.
+Un processore sa eseguire un insieme di instruzioni in formato eseguibile ed esse sono dette
+ISA.
+L'insieme ISA specifica:
+il nome delle istruzioni e le operazioni svolte;
+il modo con cui si possono manipolare i dati;
+le regole di combinazione delle varie istruzioni.
+ISA è l'interfaccia fra hardware(che esegue le operazioni) e il software(che riceve le istruzioni
+dall'uomo)
+Il linguaggio assembly è una rappresentazione leggibile del linguaggio macchina.
+Il linguaggio di alto livello viene tradotto dal compilatore in linguaggio macchina affinchè
+questo venga eseguito dal processore.
+Nel linguaggio ad alto livello si fanno molte più cose rispetto al linguaggio assembly perchè vi
+sono istruzioni sono piu potenti.
+
+▸ Caratteristiche dello stile RISC (reduced istruction sert computer)
+▸ modi di indirizzamento semplici 
+▸ tutte le istruzioni occupano una sola parola 
+▸ meno istruzioni 
+▸ operazioni aritmetiche e logiche possono essere effettuate solo sui registri del processore 
+▸ istruzioni semplici favoriscono l’esecuzione veloce 
+▸ programmi tendenzialmente di dimensioni più grandi 
+Add R3, R3, R5 
+
+▸ Caratteristiche dello stile CISC (complex istruction set computer)
+▸ modi di indirizzamento più complessi 
+▸ istruzioni più complesse che possono occupare più parole di memoria 
+▸ tante istruzioni che effettuano compiti complessi 
+▸ operazioni aritmetiche e logiche possono usare operandi in memoria e nei registri del processore 
+▸ trasferimenti da una locazione di memoria a un’altra tramite una singola istruzione 
+▸ programmi tendenzialmente di dimensioni più piccole
+Add R3, R2
+
+1)Operazioni con la pila.
+Una struttura dati fondamentale è la pila: lista di elementi per la 
+quale si può inserire ed estrarre elementi solo dall’alto (cima o 
+top) 
+▸ Quando si toglie un elemento dalla pila, dall’alto, l’elemento 
+appena sotto diventa la nuova cima 
+▸ Solo l’ultimo elemento inserito è estraibile (LIFO: last-in-first-out) 
+▸ Sono disponibili solo due operazioni: push (impilare), ovvero 
+porre in cima alla pila; pop (spilare), ovvero togliere dalla cima 
+▸ Per convenzione, si disegna la memoria in modo che le parole di 
+memoria hanno indirizzi crescenti verso il basso 
+
+Nel processore si trova un registro chiamato SP (Stack Pointer) che punta 
+all’elemento in cima alla pila 
+▸ Con la memoria indirizzabile per byte e parola di 4 byte, l’operazione push
+(impila) del valore del registro Rj si ottiene tramite 
+Subtract SP, SP, #4
+Store Rj, (SP) 
+▸ La prima istruzione aggiorna SP, diminuendo di 4 unità il contenuto, per farlo 
+puntare alla parola di memoria appena sopra la cima. L’istruzione Store
+memorizza il registro Rj in cima alla pila 
+▸ L’operazione pop sarà quindi 
+Load Rj, (SP) 
+Add SP, SP, #4
+
+2)Passaggio di parametri.
+Passaggio di parametri avviene o tramite registri o pila, dato che i registri sono limitati 
+si utilizza la pila per mandarli al programma sottochiamante, motivo per il quale si usa la pila che ha politica lifo, 
+che permette quindi di salvare i contenuti dei registri e l'indirizzo di rientro
+
+3)Area di attivazione, la subroutine se usa FP accede più facilmente ai dati nella pila.
+L'area di attivazione è tutta l'area che comprende i dati di una sub routine. Essa si divide,
+partendo dal basso e andando verso l'lalto, in varie parti.
+E' una porzione di memoria che si espande al di sopra del programma chiamante. Sono presenti
+dei parametri da passare alla sub routine. Il valore subito sopra è FP e viene inserito quando la
+routine sta per cominciare.Sorrendo la memoria verso su, si ha ancor hanno le variabili locali e i
+valori dei registri che sono stati salvati che contenevano valori utili al programma chiamato.
+Per definizione SP punterà sempre alla cima dello stack, quindi alla cima della pila
+
+2)TRASFERIMENTO DATO DALLA MEMORIA DI UN REGSTRO E CONOSCO INDIRIZZO A CUI ACCEDERE COME INDICE A SPIAZZAMENTO.
+I vari modi con cui un’istruzione può specificare la posizione degli operandi si 
+chiamano modi di indirizzamento (addressing mode)
+▸ Modo di registro: l’operando o il risultato è contenuto in un registro del processore, 
+il cui nome (che è anche l’indirizzo del registro) è dato nell’istruzione. Es. 
+ Add R3, R3, R5 
+▸ Modo assoluto (o diretto): l’operando o il risultato è contenuto in una parola di 
+memoria il cui indirizzo è dato nell’istruzione. Es. 
+ Load R2, NUM1
+Modo immediato (o di costante): l’operando è dato esplicitamente 
+nell’istruzione. Es. 
+ Add R4, R6, #200
+▸ Si aggiunge 200 al valore contenuto nel registro R6 e si pone il risultato 
+in R4. Si usa il simbolo # per denotare la cosante numerica 
+▸ Modo indiretto: l’indirizzo effettivo di operando o risultato è contenuto 
+in un registro del processore, il cui nome è dato nell’istruzione. Es. 
+ Load R2, (R5) 
+Modo con indice e spiazzamento: l’indirizzo effettivo di un operando o risultato è 
+ottenuto addizionando un valore costante, chiamato spiazzamento, al contenuto di 
+un registro, dove sia spiazzamento che registro sono dati nell’istruzione
+Load R2, 20(R5) 
+Una variante del modo con indice e spiazzamento si ottiene usando 
+due registri: uno che fa da base e uno che fa da indice 
+▸ Il modo con base e indice si denota con (Ri, Rj)
+▸ L’indirizzo effettivo è la somma di Ri e Rj
+
+1)Scrivere un'istruzione store, con indice a spiazzamento.
+Store r1, 10(R5)
+------------------------------------------
+CAPITOLO 5
+3)Spiegare percorso dati (NEL DETTAGLIO, STADIO PER STADIO, REGISTRI INTERSTADI ECC.)
+L’esecuzione consiste in una sequenza di azioni più elementari, e la rete combinatoria è 
+organizzata a più stadi; occorrono registri interstadi 
+▸ Con n stadi in cascata l’esecuzione di un’istruzione sarà completata dopo n cicli di clock 
+▸ I circuiti dei singoli stadi sono più semplici, e il periodo di clock può essere più breve 
+▸ Facilita l’esecuzione in pipeline
+
+Schema di esecuzione a stadi 
+1. Preleva istruzione e la pone in IR, incrementa PC. 
+L’informazione in IR genera segnali di controllo per tutti 
+i passi 
+2. Decodifica istruzione e legge registri dal banco di 
+registri 
+3. Esegue un’operazione dell’ALU 
+4. Legge o scrive dati in memoria se l’istruzione ha 
+operando in memoria 
+5. Scrive il risultato nel registro destinazione, se necessario 
+▸ Ogni stadio è completato in un periodo di clock
+
+2)Datapath, spiegare come funzionano i multiplexer.
+
+multiplex:
+si usano nell ALU.
+Si usa un multiplatore (MuxB) su uno degli 
+ingressi (InB) per selezionare un operando 
+sorgente immediato 
+
+Ci sono dei registri interstadio RA,RB,RZ,RM,RY che memorizzano un risultato di uno stadio
+precedente. Essi sono anche ingressi per dei prossimi stadi.
+Nello stadio 4, RZ va mandato in memoria e sarà un indirizzo. Sarà collegato alla parte della
+memoria che prende in input gli indirizzi.
+RZ è collegato ad un altro multiplexer che si attiva se il dato di RZ non ha necessità di
+interfacciarsi con la memoria, come nel caso di una ADD .
+RM è un dato che viene passato alla memoria, verso gli ingressi della memoria che sono fatte
+apposta per far scrivere in memoria dei DATI, quindi esso entra in gioco quando si tratta di una
+store per immagazzinare dati in memoria.
+Nel caso della STORE, l'indirizzo di memoria che sarà usato per salvare un dato in memoria,
+viene passato a RA e, con la ALU, si avrà l'indirizzo effettivo. Quest'ultimo verrà scritto su RZ per
+poi essere mandato in memoria.
+Alla fine del 4 stadio si memorizza qualcosa su RY. Tale dato viene mandato nel banco dei
+registri per memorizzare il conenuto ed entra nell' Ingresso C .
+Da notare che il banco dei registri avrà 2 cicli di clock provenienti dallo stadio 2 e dallo stadio 5.
+In caso di una load , il dato proveniente dalla memoria viaggia sulla linea collegata ad 1 su
+MuxY. Nello stadio 4 l'ingresso 1 del muxY sarà selezionato (mediante un segnale di controllo)
+per scrivere il valore letto dalla memoria su RY .
+Questo procedimento avviene per la maggior parte delle istruzioni. LDR, STR, ADD, SUB, CMP .
+PRELIEVO DELLE ISTRUZIONI (stadio 1)
+Lo stadio 1 preleva le istruzioni. In questo stadio si deve leggere la successiva istruzione
+dello stadio successivo. Questo valore si legge in PC . 
+Il generatore degli indirizzi delle istruzioni riesce ad incrementare il registro PC di 4 byte(la
+grandezza di una parola di memoria) se si tratta della prossima parola di memoria da puntare
+oppure di TOT se si tratta di una CALL oppure qualsiasi altra istruzione di salto o interruzioni.
+Il valore di PC viene mandato a un multiplexer
+MuxMA che sarà collegato all'ingresso degli
+indirizzi della memoria (accompagnato
+dall'eventuale segnale di controllo di lettura
+dalla memoria). La memoria darà l'istruzione
+che verrà memorizzata in IR .
+MuxMA esiste perchè gli indirizzi da mandare
+alla memoria relativi alle istruzioni da
+prelevare sono diversi dagli indirizzi contenuti
+in una load o una store (entrambi calcolati in
+RZ). Per questo motivo il multiplexer decide
+quale tipo di indirizzo bisogna selezionare tra
+l'indirizzo presente in RZ e l'indirizzo presente
+in PC.
+- Allo stadio 1 viene passato sempre
+l'indirizzo presente in PC attraverso
+l'ingresso 1 del multiplexer MuxMA.
+- Allo stadio 4, se si tratta di una load o una
+store, si seleziona l'ingresso 0 nel
+multiplexer MuxMA e quindi si prende in
+ARCHITETTURA DEGLI ELABORATORI 49
+considerazione l’indirizzo effettivo calcolato in
+RZ.
+Il blocco IMMEDIATO serve per
+estendere i 16 bit prelevati
+dall'istruzione in IR affinchè siano
+di 32 bit. Esso mette a 0 tutti i bit
+piu significativi perchè nei bit
+meno significativi è codificato il
+valore immediato.
+All'interno di MuxB arriverà un
+dato a 32 bit perchè esso non
+può operare con una quantità di
+bit diversi fra loro. Ciò serve per
+evitare di avere delle reti spurie.
+I bit di IR sono forniti dall'operazione di prelievo che si è conclusa con il primo ciclo di clock.
+Si passa ad un circuito di controllo un'istruzione che decodifica il codice operativo
+dell'istruzione e vengono mandati tutti i segnali necessari nel percorso dati che servono per
+pilotare la memoria (in caso di LOAD). Il circuito di controllo comunica il codice operativo per far
+capire alla memoria l'operazione che è richiesta.
+
+Esempio
+Load R5, X(R7)
+2. Leggi R7 dal banco di registri e scrivilo in RA
+3. Esegui somma in ALU con input RA e valore immediato X, 
+poni risultato in RZ
+4. Leggi la locazione di memoria all’indirizzo tenuto in RZ e 
+poni il valore letto in RY
+5. Scrivi RY in R5
+
+Store R6, X(R8)
+2. Leggi R8 e R6 dal banco di registri e scrivili in RA e RB, 
+rispettivamente 
+3. Esegui somma in ALU con input RA e valore X, poni 
+risultato in RZ, inoltre poni RB in RM
+4. Scrivi nella locazione di memoria con indirizzo RZ il 
+valore RM 
+‣ Le istruzioni di chiamata a sottoprogramma salvano l’indirizzo 
+di rientro, a questo fine, il MuxY presenta un ingresso ulteriore, 
+collegato al generatore di indirizzi
+
+Lo stadio che potrebbe occupare più cicli di clock, tutti uguali, ma nell'accesso alla memoria può variare.
+Come viene gestito questo ritardo (MFC).
+
+Nel percorso dati, lo stadio che potrebbe occupare più cicli di clock è sicuramente lo stadio 
+4 oppure lo stadio 1 perchè entrambi accedono alla memoria rispettivamente per prelevare
+l'istruzione e per leggere/scrivere in memoria (se si tratta di istruzione Load o Store)
+Quando la memoria finisce le sue operazioni invia al processore un segnale di controllo, 
+chhiamato Memory Function Completed MFC, e grazie a questo il contatore di passi continua a scorrere
+con il prossimo passo.
+In questa fase le istruzioni successive, in caso di dipendenza di dato, potrebbero avere dei 
+rallentamenti durante la loro esecuzione. Ciò si può risolvere via software (istruzioni NOP) oppure via 
+hardware (inoltro degli operandi).
+VIA SOFTWARE: L'istruzione successiva alla Load/Store sarà una No Operation perchè è assolutamente 
+inutile che le prossime istruzioni vengano prelevate visto che comunque saranno scartate. Di 
+conseguenza verranno scartate delle istruzioni fino a quando il risultato dell'istruzione Load non 
+è scritto nel banco dei registri e quindi utilizzabile dall'istruzione che dipende da tale dato.
+In questo caso si perderebbero circa 3 cicli di clock.
+VIA HARDWARE: è possibile diminuire ancora queste penalità aggiungendo dell'hardware apposito che serve 
+per eseguire l'inoltro degli operandi. Durante l'esecuzione dell'istruzione il dato sarà già presente
+da qualche parte nel percorso dati prima dello stadio 5, ovvero quello di scrittura nel banco dei registri. 
+Se si tratta di una load, tale dato si troverà in RY visto che è stato appena caricato dalla memoria.
+Se si tratta di una ADD/SUB tale dato si troverà in RZ e poi, lo stadio successivo, in RY. Per questo motivo 
+viene aggiunto un secondo MuxA prima della porta d'ingresso dell'ALU affinchè ci sia la possibilità di
+selezionare tale dato quando l'istruzione che dipende da esso ne ha bisogno.
+
+5)Generazione segnali di controllo.
+Il Decodificatore di istruzione interpreta il codice operativo in 
+IR e pone a 1 una uscita INSi 
+▸ Il contatore di passi pone a 1 una uscita da T1 a T5 per indicare 
+quale passo corrente è in corso (tutte le istruzioni si eseguono in 
+5 passi) 
+▸ Il Generatore (al centro) produce i segnali di controllo necessari 
+▸ Es. per il passo 1 (prelievo istruzione da memoria), identificato 
+da T1 a 1, il Generatore pone le sue uscite 
+▸ MA_selettore a 1 per selezionare il PC su MuxMA
+▸ Mem_lettura a 1 per effettuare la lettura da memoria 
+▸ IR_Abilita a 1 (solo quando MFC è 1) 
+▸ Inc_selettore a 0 e PC_selettore a 1 per incrementare 
+PC di 4 
+▸ PC_abilita a 1 per scrivere il risultato di PC alla fine del 
+passo 
+
+
+3)Descrivere LOAD secondo percorso dati.
+Audio
+
+--------------------------------------------- 
+CAPIITOLO 6
+
+2)Esecuzione in pipeline. 
+Organizzazione in pipeline, e i nomi degli stadi della pipeline.
+Pipelining: organizzazione a stadi di un processo produttivo per l’esecuzione  parallela. 
+Sovrapposizione di stadi diversi del processo per prodotti diversi
+I buffer interstadi contengono i registri RA, RB, 
+RM, RY, RZ, IR, PC-Temp 
+▸ Il Buffer B1 alimenta lo stadio Decodifica
+▸ Il Buffer B2 alimenta lo stadio Elaborazione con 
+i due operandi letti dal banco registri, il valore 
+immediato, il valore del PC, e i segnali di 
+controllo 
+▸ Il Buffer B3 tiene il risultato del calcolo svolto 
+dall’ALU, e nel caso di scrittura in Memoria il 
+dato da scrivere 
+▸ Il Buffer B4 alimenta lo stadio Scrittura con un 
+valore da scrivere nel banco dei registri 
+(risultato dell’ALU o dell’accesso in memoria)
+
+3)In cosa consiste il throughput.
+La frequenza di operazione (throughput) P indica meglio la prestazione di un 
+processore. Throughput (P): numero medio di istruzioni eseguite nell’unità di 
+tempo (istruzioni al secondo) 
+▸ Senza pipeline p= r/s
+▸ Con pipeline ideale p=r
+S: numero medio di cicli di clock per istruzione 
+▸ R: frequenza di clock (l’inverso della frequenza è il periodo di clock)
+
+2)Dipendenza di dato FARE ESEMPIO, con Inoltro si perde 1 CICLO DI CLOCK.
+Add R2, R3, #100 // R2 è il risultato della prima istruzione 
+Subtract R9, R2, #30 // R2 è un operando della seconda istruzione 
+▸ La seconda istruzione va in stallo per tre cicli 
+▸ Il circuito di controllo rileva la dipendenza di dato confrontando gli identificatori dei 
+registri delle due istruzioni nei buffer intestati B1 e B2 
+▸ L’istruzione in stallo rimane in B1 per tre cicli 
+▸ La prima istruzione procede e le successive istruzioni attendono 
+▸ Si possono produrre tre cicli di attesa generando NOP virtuali in B2, ovvero bolle 
+(bubble) che procedono nella pipeline
+
+3)Predizioni di salti, dinamica a 2 e 4 strati.
+Per migliorare l’accuratezza della predizione, si usa l’attuale comportamento. Nella 
+forma più semplice: il processore assume che la prossima volta che l’istruzione è 
+eseguita la decisione sul salto sia la stessa dell’ultima volta 
+▸ Macchina a due stati: PS, Probabilmente Salta; e PNS, Probabilmente Non Salta 
+▸ Richiede un solo bit per rappresentare la storia dell’istruzione 
+▸ Funziona bene all’interno di un ciclo, ma la predizione è sbagliata per l’ultima 
+passata e per la prima passata, se si incontra nuovamente l’istruzione 
+▸ Si assuma che lo stato sia inizialmente PNS, si aggiorna a PS se salta e rimane in PS 
+fino all’ultima passata
+
+▸ Per migliorare l’accuratezza della predizione, si usa la storia 
+dell’esecuzione. Si hanno quattro stati: MPS, Molto 
+Probabilmente Salta; PS, Probabilmente Salta; PNS, 
+Probabilmente Non Salta, MPNS, Molto Probabilmente Non Salta 
+▸ Si assuma che lo stato sia inizialmente PNS, se l’istruzione di 
+salto viene eseguita lo stato si aggiorna in MPS, altrimenti in 
+MPNS 
+▸ Per un ciclo, che ha la condizione alla fine, si inizia con lo stato 
+PNS e si cambia in MPS alla prima passata, la previsione sarà 
+corretta per le altre passate 
+▸ Per l’ultima passata la previsione è sbagliata e lo stato viene 
+aggiornato a PS, non avendo effettuato il salto 
+▸ Quando si incontra il ciclo nuovamente, si parte da PS e la 
+predizione sarà corretta se si fa almeno una passata
+
+Descrivere LOAD secondo percorso dati.
+I STADIO: L'indirizzo della prossima istruzione(PC) viene prelevata e 
+mandata all'interfaccia CPU-RAM 
+dove verrà prelevata dalla memoria l'istruzione da inserire in IR.
+Si ha l'incremento di PC di 4 affinchè contenga la prossima istruzione.
+II STADIO: Vi è la decodifica dell'istruzione e quindi viene prelevato l'indirizzo di memoria dal quale 
+bisogna fare la Load e va in RA.
+III STADIO: Viene calcolato l'indirizzo effettivo di memoria. Se vi è uno spiazzamento, si aggiunge 
+un valore immediato (esteso a 32 bit) all'ingresso B dell'ALU affinchè
+venga calcolato l'indirizzo reale.
+IV STADIO: Il risultato dell'ALU è presente in RZ e, mediante questo indirizzo, si accede alla memoria 
+e si preleva il dato. Il dato prelevato va all'ingresso 1 di MuxY e poi in RY
+V STADIO: avviene la scrittura del registro interstadio RY sul registro di destinazione.
+
+4)Simulare ADD tramite percorso dati PARLARE TUTTO PERCORSO DATI
+100 Add R2, R3, #100 
+101 Or R4, R5, R6 
+102 Subtract R9, R2, #30 
+‣ Ciclo di clock 1, prelievo istruzione 1, In B1: PC ha 101, IR ha Add
+‣ Ciclo di clock 2, prelievo istruzione 2, decodifica istruzione 1 
+‣ In B1: PC ha 102, IR ha Or
+‣ In B2: PC ha 101, IR ha Add, RA ha [R3] 
+‣ Ciclo di clock 3, prelievo istruz 3, decodifica istruz 2, elabor istruz 1 
+‣ In B1: PC ha 103, IR ha Subtract 
+‣ In B2: PC ha 102, IR ha Or, RA ha [R5], RB ha [R6] 
+‣ In B3: PC ha 101, IR ha Add, RZ ha [R3]+100 
+‣ Ciclo di clock 4, preliev istruz 4, decod istruz 3, elab istruz 2, mem istruz 1 
+‣ In B1: PC ha 104, … In B2: PC ha 103, IR ha Subtract, RA ha [R2] 
+‣ In B3: PC ha 102, IR ha Or, RZ ha [R5] OR [R6] 
+‣ In B4: PC ha 101, IR ha Add, RY ha [R3]+100 
+‣ Ciclo di clock 5, preliev istruz 5, decod istruz 4, elab istruz 3, mem istruz 2, scritt istr 1 
+‣ In B1: PC ha 105, … In B2: PC ha 104, … 
+‣ In B3: PC ha 103, IR ha Subtract, RZ ha [R2]-30 
+‣ In B4: PC ha 102, IR ha Or, RY ha [R5] OR [R6] 
+‣ In R2 si scrive [R3]+100
+----------------------------------------------------------------------------
+CAPITOLO 8
+4)Tempo necessario per accesso memoria. (CACHE, MEMORIA FISSA, EQUAZIONE ACCESSO MEMORIA).
+tempo di  accesso:
+▸ Si abbia: C1 = t(il tempo di accesso per le due cache L1), inoltre per 
+trasferire un blocco da L2 a L1 occorre un tempo  C2=15t e per trasferire un 
+blocco da Memoria a L2 occorre un tempo M=100t
+▸ Si assuma che i tassi di hit siano uguali per istruzioni e dati e che per L1 e L2 
+siano h=0.96 e h2=0.80 rispettivamente
+▸ Il tempo medio di accesso visto dal processore è 
+tavg = h1C1 + (1 − h1)(h2C2 + (1 − h2)M)
+▸ Quindi 
+tavg = 0,96t + 0,04(0,80 ⋅ 15t + 0,20 ⋅ 100t) = 2,24t
+▸ Si supponga ora che L2 sia rimossa e che L1 sia più grande in modo da 
+dimezzare il tasso di miss. Il tempo medio di accesso alla memoria è 
+tavg = 0,98t + 0,02 ⋅ 100t = 2,98t
+
+Memoria cache,uso della cache, cache separate.
+▸ La memoria cache ha lo scopo di mostrare al processore un sistema di memoria più 
+veloce di quanto non sia la sola memoria centrale. L’efficacia dipende dalla 
+proprietà di località che il programma esibisce
+Località temporale: se si preleva un’istruzione nel ciclo di clock i, allora con elevata 
+probabilità si preleva la stessa istruzione nel ciclo di clock i+p, con p>0 piccolo
+▸ E’ una conseguenza dalla presenza di cicli
+▸ Località spaziale: se si usa il dato all’indirizzo i, allora con probabilità elevata si usa 
+pure il dato all’indirizzo i+q, con q!=0 piccolo (non si sa quando si usa il dato in i+q)
+▸ E’ conseguenza della presenza di dati aggregati in strutture (es. vettori)
+
+L’unità di controllo della cache lavora in base al principio di località spaziale e 
+temporale: quando il processore usa una parola di memoria il blocco che la 
+contiene è scritto in copia nella cache, dove il processore lo troverà se lo dovesse 
+usare nuovamente
+▸ Nella cache il blocco occupa una posizione (o regione) detta posizione di cache, o 
+linea di cache, o blocco di cache. Quando il processore usa una qualsiasi delle 
+parole del blocco la trova già in cache
+▸ Lo spazio in cache è limitato. Quando le posizioni di cache sono tutte occupate e il 
+processore richiede una parola non in cache bisogna trovare una posizione da 
+liberare. La procedura di scelta è detta algoritmo di sostituzione (LRU, FIFO)
+
+▸ Se l’operazione di lettura o scrittura si può eseguire su cache, si dice che si è verificato un 
+hit (successo) di lettura o scrittura in cache, quindi cache read hit o cache write hit
+▸ Se l’operazione è di lettura, e la cache contiene il dato, la memoria centrale non è 
+coinvolta
+
+▸ Se l’operazione è di scrittura, e la cache contiene il dato, si può procedere con una 
+scrittura immediata (write through) in memoria centrale; o con una scrittura differita
+(write back o copy back) che aggiorna subito solo un bit di modifica, mentre la memoria 
+centrale sarà aggiornata quando si dovrà liberare la posizione (blocco) della cache
+
+▸ La scrittura immediata è più semplice, ma obbliga a scrivere la memoria anche quando 
+non necessario, ovvero quando la cache viene aggiornata più volte. I processori usano 
+spesso il modo write back
+Se l’operazione è di lettura e la parola indirizzata non si trova in cache si verifica un 
+evento di miss di lettura di cache
+▸ Il processore deve attendere che il blocco che contiene la parola venga caricato dalla 
+memoria centrale e inserito in una posizione della cache. Dopo che il blocco è stato 
+caricato in cache la parola viene letta dal processore, questo è detto modo di lettura 
+differita (read back)
+▸ In alternativa, la parola potrebbe essere mandata al processore non appena caricata 
+in cache, senza attendere il completamento della lettura del blocco, questo modo è 
+detto lettura immediata (load through)
+▸ Se l’operazione è di scrittura e la parola non si trova in cache si ha una miss di 
+scrittura di cache, ovvero cache write miss (o semplicemente miss)
+▸ Se si adotta la scrittura immediata (write through), la parola viene scritta subito in 
+memoria centrale, oppure con la scrittura differita (write back) il blocco viene caricato 
+in cache e quindi subito dopo viene aggiornato
+
+Memoria statica
+▸ I transistor T1 e T2 funzionano come 
+interruttori e si possono aprire e chiudere 
+pilotandoli dalla linea di parola
+▸ Se la linea di parola è 0 (massa) i due 
+transistor T1 e T2 sono in interdizione, 
+ovvero aperti, e la coppia di negatori è 
+isolata e mantiene lo stato. Con X=1 allora 
+il valore logico è 1, e Y=0
+▸ Per leggere, si attiva la linea di parola 
+(mettendo 1), si chiudono i transistor, e si 
+fornisce il bit memorizzato in b (se X=1, b 
+si porterà a 1) e il complemento in b’
+▸ Per scrivere, si inserisce il dato in b (e il suo 
+complemento in b’) e si attiva la linea di 
+parola, questo forza X al valore inserito su b, 
+che viene mantenuto quando la linea di 
+parola va a 0 6
+‣ Realizzazione cella tramite 6 transistor: T1, T2 e 2 
+transistor per ciascuna porta not
+‣ Vantaggi: (1) basso consumo di energia, poiché i 
+transistor in interdizione non fanno dissipare 
+potenza; (2) tempo di accesso alla cella molto breve 
+(pochi nanosecondi), utilizzo: memorie cache
+‣ Svantaggi: costo per bit elevato, poiché occorrono 6 
+transistor in tecnologia CMOS
+
+equazione
+tavg = hC + (1 − h)M
+▸ Un ottimo indicatore di efficacia per la memoria cache è il tasso di successo o 
+hit rate, h, ovvero il rapporto fra numero di accessi con hit e numero totale di 
+accessi
+▸ Tasso di insuccesso, o miss rate è pari a 1 - h
+▸ Le prestazioni degradano nel caso di evento di miss
+▸ Il tempo totale di accesso quando accade una miss è detto penalità di miss, M
+(ovvero, il tempo necessario a caricare un blocco da memoria centrale a cache, 
+e il tempo di accesso alla cache, C)
+
+6)Organizzazione cache, quindi diretto, associativo, associativo a gruppi.
+Si abbia una cache di 128 posizioni,
+▸ Indirizzamento diretto: ogni blocco di memoria centrale può 
+essere caricato in una sola posizione in cache, data dal resto 
+della divisione fra numero del blocco e 128 (i mod 128). Più 
+blocchi occupano la stessa posizione in cache in momenti diversi
+▸ L’indirizzo della parola di memoria viene suddiviso in tre parti 
+(campi)
+▸ Il campo blocco dell’indirizzo (7 bit) individua la posizione in 
+cache (1 fra 128 posizioni), il campo spiazzamento (4 bit) 
+individua la parola nel blocco (1 fra 16 parole), il campo
+etichetta (5 bit) è registrato come etichetta associata al blocco 
+della cache
+
+Ogni blocco è caricabile in qualsiasi posizione in 
+cache. Si sostituisce un blocco solo se tutta la cache 
+è occupata, ovvero lo spazio della cache è caricato 
+in modo efficiente
+▸ La valutazione di cache hit/miss è più costosa: si 
+devono confrontare tutte le etichette, si deve avere 
+un algoritmo di sostituzione (es. LRU)
+▸ L’indirizzo di memoria è diviso in due campi: 
+etichetta e spiazzamento. Il campo etichetta è di 12 
+bit per identificare quale fra i 4K=2^12 blocchi della 
+memoria sia caricato in cache
+▸ Per stabilire se la parola cercata è in cache occorre 
+confrontare il campo etichetta dell’indirizzo con 
+tutte le 128 etichette di posizione
+▸ Tale ricerca si chiama ricerca associativa e va 
+condotta in parallelo su tutte le etichette
+
+Le posizioni di cache sono riunite in gruppi e la 
+relazione è fra blocchi in memoria e gruppi in cache
+▸ Quindi si può copiare il blocco in una qualsiasi 
+posizione del gruppo, e si ha corrispondenza 
+associativa per blocchi all’interno di un gruppo, e 
+corrispondenza diretta per blocchi sui gruppi
+▸ Si riduce il conflitto dell’indirizzamento diretto, ma 
+è meno flessibile dell’indirizzamento associativo
+▸ L’indirizzo è suddiviso in tre campi: spiazzamento, 
+gruppo e etichetta
+▸ Si confrontano tutte le etichette di un gruppo per 
+cercare se la parola è in cache
+▸ La cache si dice a n vie, con n numero di posizioni
+del gruppo
+
+Svantaggio diretto cache (collegato alla scelta della posizione del blocco della cache). 
+IL BLOCCO E' SEMPRE NELLA STESSA POSIZIONE. RIMPIAZZARE APPENA RIMPIAZZIATO, CONTINUI SWAP TRA CACHE E MEMORIA. STUDIARE NEL LIBRO.
+--------------------------------------------------------------------
